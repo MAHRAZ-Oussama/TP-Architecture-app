@@ -58,6 +58,27 @@ class StudentIterator3(Iterator):
         return student
 
 
+class StudentIterator4(Iterator):
+    def __init__(self, students):
+        self._students = sorted(students, key=lambda s: s.grade4, reverse=True)
+        self._index = 0
+
+    def __next__(self):
+        if self._index >= len(self._students):
+            raise StopIteration
+        student = self._students[self._index]
+        self._index += 1
+        return student
+
+
+def add_iter_matter_4(cls):
+    def iter_matter_4(self):
+        return StudentIterator4(self.students)
+    cls.iter_matter_4 = iter_matter_4
+    return cls
+
+
+@add_iter_matter_4
 class SchoolClass(Iterable):
     def __init__(self):
         self.students = []
@@ -101,5 +122,5 @@ for student in StudentIterator2(school_class.students):
 for student in StudentIterator3(school_class.students):
     print(student.name, student.grade3)
 
-for student in school_class.students:
+for student in school_class.iter_matter_4():
     print(student.name, student.grade4)
